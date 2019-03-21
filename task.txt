@@ -1,0 +1,7 @@
+
+O aplica?ie legata de trasee montane:
+-sa po?i selecta ?i vizualiza traseele în func?ie de ce lan? muntos fac parte
+-sa po?i cauta în func?ie de dificultatea traseului sau sa vizualizezi dificultatea traseului ales 
+-traseele vor avea: descrieri, dificultate, mod de abordare, durata, harta, marcaje, cel mai apropiat echipaj salvamont  etc.
+                    marcate surse de apa pe parcursul traseului
+                    posibilita?i de cazare (+ descriere cazare)
