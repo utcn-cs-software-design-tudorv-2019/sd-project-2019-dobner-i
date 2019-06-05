@@ -21,7 +21,11 @@ public class Profile {
     @Column(name = "profileDescription",length = 100,nullable = false)
     private String profileDescription;
 
-    public Profile(String profileName, String profileDescription) {
+    public Profile() {
+    }
+
+    public Profile(UserAccount user, String profileName, String profileDescription) {
+        this.user=user;
         this.profileName = profileName;
         this.profileDescription = profileDescription;
     }
@@ -56,6 +60,15 @@ public class Profile {
 
     public void setUser(UserAccount user) {
         this.user = user;
+    }
+
+    public Profile clone(){
+        Profile profile  = new Profile();
+        profile.setProfileId(this.profileId);
+        profile.setUser(this.user);
+        profile.setProfileName(this.profileName);
+        profile.setProfileDescription(this.profileDescription);
+        return profile;
     }
 
     @Override

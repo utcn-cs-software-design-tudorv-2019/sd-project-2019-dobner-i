@@ -1,0 +1,115 @@
+package proj.a2.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import proj.a2.model.entity.*;
+import proj.a2.model.entity.UserAccount;
+import proj.a2.model.service.ProfileService;
+
+import proj.a2.model.service.UserAccountService;
+
+
+import javax.inject.Inject;
+
+@Controller
+public class ProfileController {
+
+    @Inject
+    ProfileService profileService;
+
+    @Inject
+    UserAccountService userService;
+
+    @RequestMapping(value = "",method = RequestMethod.GET)
+    public ModelAndView loginView(){
+        ModelAndView mav = new ModelAndView("viewProfile");
+
+        mav.addObject("user",new UserAccount());
+        mav.addObject("profile",new Profile());
+        return mav;
+    }
+
+    @RequestMapping(value = "",method = RequestMethod.POST)
+    public ModelAndView processOperations(@RequestParam(value = "action") String action,
+                                          @RequestParam(value = "username") String username,
+                                          @RequestParam(value = "password") String password,
+                                          @ModelAttribute(value = "profile")Profile profile){
+        ModelAndView mav = new ModelAndView("profile");
+        UserAccount user = new UserAccount();
+        user.setUserName(username);
+        user.setUserPassword(password);
+        if(action.equals("Login")) performLoginOperation(mav,user);
+        else if(action.equals("Create")) createProfile(mav,profile);
+        else if(action.equals("Update")) updateProfile(mav,profile);
+        else if(action.equals("Delete")) deleteProfile(mav,profile);
+        mav.addObject("user",new UserAccount());
+        return mav;
+    }
+
+    private void performLoginOperation(ModelAndView mav, UserAccount user){
+        System.out.println(user);
+        if(!userService.checkUser(user)){
+            mav.addObject("profile",new Profile());
+            return;
+        }
+        //user was valid
+        user = userService.findUser(user);
+        System.out.println(user);
+        Profile profile = userService.findProfile(user); //??/////////???/////////????/////////
+        if(profile == null){
+            mav.addObject("profile",new Profile());
+            return;
+        }
+        //valid profile - present information
+        mav.addObject("profile",profile);
+    }
+
+    private void createProfile(ModelAndView mav, Profile profile){
+        if(profileService.checkIfExists(profile)){  //profile already exist in database
+            profile = profileService.viewProfile(profile);
+            mav.addObject("profile",profile);
+            return;
+        }
+
+        profileService.createProfile(profile);
+        profile = profileService.viewProfile(profile);
+        mav.addObject("profile",profile);
+    }
+
+    private void updateProfile(ModelAndView mav, Profile profile){
+        if(!profileService.checkIfExists(profile)){  //profile does not exist in database
+            mav.addObject("profile",new Profile());
+            return;
+        }
+
+        Profile prof = profileService.viewProfile(profile);
+        Profile oldProfile = prof.clone();
+
+        //we need to update only the fields that are changed
+        if(!profile.getProfileName().equals("") && profile.getProfileName().compareTo(oldProfile.getProfileName()) != 0)
+            oldProfile.setProfileName(profile.getProfileName());
+
+        if(!profile.getProfileDescription().equals("") && profile.getProfileDescription().compareTo(oldProfile.getProfileDescription()) != 0)
+            oldProfile.setProfileDescription(profile.getProfileDescription());
+
+
+
+        profileService.updateProfile(oldProfile);
+        profile = profileService.viewProfile(oldProfile);
+
+        mav.addObject("profile",profile);
+    }
+
+    private void deleteProfile(ModelAndView mav, Profile profile){
+        if(!profileService.checkIfExists(profile)){  //profile does not exist in database
+            mav.addObject("profile",new Profile());
+            return;
+        }
+
+        profileService.deleteProfile(profile);
+        mav.addObject("profile",new Profile());
+    }
+}
