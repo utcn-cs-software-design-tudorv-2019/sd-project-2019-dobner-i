@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SearchResults</title>
+</head>
+<body>
+<div xmlns:th="http://www.thymeleaf.org">
+    <form th:object="${trip}" method = "POST">
+
+
+        <h4>SearchMatches</h4>
+
+        <label>SearchTrip</label>
+        <output type="text" th:field="*{initialPlace}"/>
+        <output type="text" th:field="*{targetPlace}"/>
+        <output type="text" th:field="*{mountain}"/>
+        <output type="text" th:field="*{initialPlace.height}"/>
+        <output type="text" th:field="*{targetPlace.height}"/>
+        <br/><br/>
+
+
+    </form>
+</div>
+</body>
+</html>

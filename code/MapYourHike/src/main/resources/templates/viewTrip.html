@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div xmlns:th="http://www.thymeleaf.org">
+    <form th:object="${trip}" method = "POST">
+
+
+        <h4>TripSearch</h4>
+
+        <label>SearchTrip</label>
+        <input type="text" th:field="*{mountain}"/>
+        <br/><br/>
+
+
+        <input type="submit" name = "action" value="Search"/>
+
+    </form>
+</div>
+</body>
+</html>a
